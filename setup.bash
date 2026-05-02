@@ -14,24 +14,29 @@ cp GNR-Project-2/inference.py .
 echo ">>> Creating conda environment (Python 3.11)..."
 conda create -n gnr_project_env python=3.11 -y
 
-# Step 4: Install PyTorch with CUDA support
+# Step 4: Install PyTorch with CUDA 12.6 support
 echo ">>> Installing PyTorch..."
-conda run -n gnr_project_env pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+conda run -n gnr_project_env pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 
-# Step 5: Install all other dependencies
+# Step 5: Install all dependencies (autoawq required for 72B AWQ model)
 echo ">>> Installing dependencies..."
-conda run -n gnr_project_env pip install transformers accelerate qwen-vl-utils pillow pandas
+conda run -n gnr_project_env pip install \
+    "transformers==4.51.3" \
+    "accelerate==1.6.0" \
+    "autoawq==0.2.9" \
+    "qwen-vl-utils==0.0.10" \
+    "pillow==11.2.1" \
+    "pandas==2.2.3" \
+    "huggingface_hub==0.30.2"
 
-# Step 6: Download model weights (saved to HuggingFace cache)
-echo ">>> Downloading model weights (this will take a few minutes)..."
+# Step 6: Download model weights via snapshot_download
+# (avoids loading into RAM — target system only has 16GB RAM)
+echo ">>> Downloading Qwen2.5-VL-72B-Instruct-AWQ weights (~44GB, this will take a while)..."
 conda run -n gnr_project_env python -c "
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
-import torch
-print('Downloading Qwen2.5-VL-7B-Instruct...')
-model = Qwen2_5_VLForConditionalGeneration.from_pretrained('Qwen/Qwen2.5-VL-7B-Instruct', torch_dtype=torch.bfloat16)
-processor = AutoProcessor.from_pretrained('Qwen/Qwen2.5-VL-7B-Instruct')
-del model
-print('Model downloaded successfully!')
+from huggingface_hub import snapshot_download
+print('Downloading Qwen2.5-VL-72B-Instruct-AWQ...')
+snapshot_download('Qwen/Qwen2.5-VL-72B-Instruct-AWQ')
+print('Download complete!')
 "
 
 echo "=== Setup complete! ==="
