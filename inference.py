@@ -133,7 +133,7 @@ def main():
             option = predict_answer(model, processor, image_path)
 
         print(f"  -> Answer: {option}")
-        results.append({"image_name": image_name, "option": option})
+        results.append({"id": image_name, "image_name": image_name, "option": option})
 
     submission_df = pd.DataFrame(results)
     submission_df.to_csv("submission.csv", index=False)
