@@ -14,6 +14,7 @@ def load_model():
         torch_dtype=torch.float16,
         device_map="auto",
         local_files_only=True,
+        low_cpu_mem_usage=True
     )
     model.eval()
     processor = AutoProcessor.from_pretrained(
@@ -71,7 +72,7 @@ def predict_answer(model, processor, image_path):
     with torch.no_grad():
         output_ids = model.generate(
             **inputs,
-            max_new_tokens=512,
+            max_new_tokens=1024,
             do_sample=False,
         )
 
@@ -130,7 +131,11 @@ def main():
             print("  WARNING: image not found, defaulting to 5")
             option = 5
         else:
-            option = predict_answer(model, processor, image_path)
+            try:
+                option = predict_answer(model, processor, image_path)
+            except Exception as e:
+                print(f"  ERROR during inference: {e}, defaulting to 5")
+                option = 5
 
         print(f"  -> Answer: {option}")
         results.append({"id": image_name, "image_name": image_name, "option": option})

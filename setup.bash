@@ -1,6 +1,4 @@
 #!/bin/bash
-set -e
-
 echo "=== GNR Project 2 Setup ==="
 
 # Step 1: Clone the repository
