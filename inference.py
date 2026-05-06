@@ -11,7 +11,7 @@ def load_model():
     print("Loading Qwen2.5-VL-72B-Instruct-AWQ...")
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         "Qwen/Qwen2.5-VL-72B-Instruct-AWQ",
-        torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
         device_map="auto",
         local_files_only=True,
         low_cpu_mem_usage=True
