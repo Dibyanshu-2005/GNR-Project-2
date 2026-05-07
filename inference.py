@@ -3,24 +3,23 @@ import os
 import re
 import torch
 import pandas as pd
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, AwqConfig
+from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 
 
 
 def load_model():
-    print("Loading Qwen2.5-VL-72B-Instruct-AWQ...")
+    print("Loading Qwen2.5-VL-7B-Instruct...")
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-        "Qwen/Qwen2.5-VL-72B-Instruct-AWQ",
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-        local_files_only=True,
-        low_cpu_mem_usage=True,
-        quantization_config=AwqConfig(bits=4, do_fuse=False),
+    "Qwen/Qwen2.5-VL-7B-Instruct",
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+    local_files_only=True,
+    low_cpu_mem_usage=True,
     )
     model.eval()
     processor = AutoProcessor.from_pretrained(
-        "Qwen/Qwen2.5-VL-72B-Instruct-AWQ",
+        "Qwen/Qwen2.5-VL-7B-Instruct",
         local_files_only=True,
     )
     print("Model loaded!")

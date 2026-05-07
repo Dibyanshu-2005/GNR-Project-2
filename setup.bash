@@ -21,7 +21,6 @@ echo ">>> Installing dependencies..."
 conda run -n gnr_project_env pip install \
     "transformers==4.51.3" \
     "accelerate==1.6.0" \
-    "autoawq==0.2.9" \
     "qwen-vl-utils==0.0.10" \
     "pillow==11.2.1" \
     "pandas==2.2.3" \
@@ -29,11 +28,11 @@ conda run -n gnr_project_env pip install \
 
 # Step 6: Download model weights via snapshot_download
 # (avoids loading into RAM — target system only has 16GB RAM)
-echo ">>> Downloading Qwen2.5-VL-72B-Instruct-AWQ weights (~44GB, this will take a while)..."
+echo ">>> Downloading Qwen2.5-VL-7B-Instruct weights (~44GB, this will take a while)..."
 conda run -n gnr_project_env python -c "
 from huggingface_hub import snapshot_download
-print('Downloading Qwen2.5-VL-72B-Instruct-AWQ...')
-snapshot_download('Qwen/Qwen2.5-VL-72B-Instruct-AWQ')
+print('Downloading Qwen2.5-VL-7B-Instruct...')
+snapshot_download('Qwen/Qwen2.5-VL-7B-Instruct')
 print('Download complete!')
 "
 
