@@ -3,8 +3,9 @@ import os
 import re
 import torch
 import pandas as pd
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, AwqConfig
 from qwen_vl_utils import process_vision_info
+
 
 
 def load_model():
@@ -14,7 +15,8 @@ def load_model():
         torch_dtype=torch.bfloat16,
         device_map="auto",
         local_files_only=True,
-        low_cpu_mem_usage=True
+        low_cpu_mem_usage=True,
+        quantization_config=AwqConfig(bits=4, do_fuse=False),
     )
     model.eval()
     processor = AutoProcessor.from_pretrained(
